@@ -6,7 +6,13 @@
             <div id="silentbox-overlay__embed">
                 <div id="silentbox-overlay__container">
                     <iframe width="100%" height="100%" v-if="video" :src="getEmbedUrl" frameborder="0" allowfullscreen></iframe>
-                    <img width="auto" height="auto" :src="getEmbedUrl" v-if="! video">
+                    <img width="auto" height="auto" :src="getEmbedUrl" v-if="!video && !mp4">
+
+
+                    <video v-if="!video && mp4" controls autoplay>
+                        <source :src="getEmbedUrl" type="video/mp4"> 
+                    </video>
+
                 </div>
                 <p id="silentbox-overlay__description" v-if="this.$parent.description">{{ this.$parent.description }}</p>
             </div>
@@ -28,7 +34,8 @@
         name: 'SilentboxOverlay',
         data() {
             return {
-                video: false
+                video: false,
+                mp4 :false
             }
         },
         computed: {
@@ -70,6 +77,13 @@
                     return videoUrl;
                 } else {
                     this.video = false;
+
+
+                    if (url.indexOf(".mp4")!==-1){
+                        this.mp4=true;
+                    }else{
+                        this.mp4=false;
+                    }
 
                     return url;
                 }
